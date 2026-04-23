@@ -4,12 +4,15 @@ const qrCode = new QRCodeStyling({
   height: 250,
   data: "",
   margin: 10,
+  qrOptions: {
+    errorCorrectionLevel: "H" // High error correction
+  },
   dotsOptions: {
-    color: "#000000",
+    color: "#000000",   // ALWAYS dark
     type: "rounded"
   },
   backgroundOptions: {
-    color: "#ffffff"
+    color: "#ffffff"    // ALWAYS light
   },
   cornersSquareOptions: {
     type: "extra-rounded",
