@@ -1,28 +1,58 @@
 // Initialize QR Code Styling
 const qrCode = new QRCodeStyling({
-  width: 250,
-  height: 250,
+  width: 300,
+  height: 300,
   data: "",
   margin: 10,
   qrOptions: {
-    errorCorrectionLevel: "H" // High error correction
+    errorCorrectionLevel: "H"
   },
   dotsOptions: {
-    color: "#000000",   // ALWAYS dark
-    type: "rounded"
+    color: "#000000",
+    type: "square"
   },
   backgroundOptions: {
-    color: "#ffffff"    // ALWAYS light
-  },
-  cornersSquareOptions: {
-    type: "extra-rounded",
-    color: "#000000"
-  },
-  cornersDotOptions: {
-    type: "dot",
-    color: "#000000"
+    color: "#ffffff"
   }
 });
+
+window.onload = function () {
+  qrCode.append(document.getElementById("qrcode"));
+};
+
+function generateQR() {
+  const url = document.getElementById("url").value.trim();
+
+  if (!url) {
+    alert("Enter URL");
+    return;
+  }
+
+  qrCode.update({ data: url });
+
+  // Add text overlay after slight delay
+  setTimeout(addTextOverlay, 300);
+}
+
+function addTextOverlay() {
+  const canvas = document.querySelector("#qrcode canvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  ctx.font = "bold 20px Arial";
+  ctx.fillStyle = "rgba(0,0,0,0.7)";
+  ctx.textAlign = "center";
+
+  ctx.fillText("MKES", canvas.width / 2, canvas.height / 2);
+}
+
+function downloadQR() {
+  qrCode.download({
+    name: "qr-with-text",
+    extension: "png"
+  });
+}
 
 // Append QR to center container
 window.onload = function () {
