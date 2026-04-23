@@ -1,33 +1,74 @@
-let qr;
+// Initialize QR Code Styling
+const qrCode = new QRCodeStyling({
+  width: 250,
+  height: 250,
+  data: "",
+  margin: 10,
+  dotsOptions: {
+    color: "#000000",
+    type: "rounded"
+  },
+  backgroundOptions: {
+    color: "#ffffff"
+  },
+  cornersSquareOptions: {
+    type: "extra-rounded",
+    color: "#000000"
+  },
+  cornersDotOptions: {
+    type: "dot",
+    color: "#000000"
+  }
+});
 
-function generateQR() {
-  const url = document.getElementById("url").value;
+// Append QR to center container
+window.onload = function () {
   const qrContainer = document.getElementById("qrcode");
-
   qrContainer.innerHTML = "";
+  qrCode.append(qrContainer);
+};
 
-  if (url.trim() === "") {
+// Generate QR
+function generateQR() {
+  const url = document.getElementById("url").value.trim();
+
+  if (!url) {
     alert("Please enter a valid URL");
     return;
   }
 
-  qr = new QRCode(qrContainer, {
-    text: url,
-    width: 200,
-    height: 200
+  qrCode.update({
+    data: url,
+    dotsOptions: {
+      color: getRandomColor(),
+      type: getRandomStyle()
+    },
+    cornersSquareOptions: {
+      type: "extra-rounded",
+      color: getRandomColor()
+    },
+    cornersDotOptions: {
+      type: "dot",
+      color: getRandomColor()
+    }
   });
 }
 
+// Download QR
 function downloadQR() {
-  const img = document.querySelector("#qrcode img");
+  qrCode.download({
+    name: "qr-code",
+    extension: "png"
+  });
+}
 
-  if (!img) {
-    alert("Generate QR first!");
-    return;
-  }
+// 🎨 Random Color Generator
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+}
 
-  const link = document.createElement("a");
-  link.href = img.src;
-  link.download = "qr-code.png";
-  link.click();
+// 🎭 Random Style Generator
+function getRandomStyle() {
+  const styles = ["square", "rounded", "dots", "classy", "classy-rounded"];
+  return styles[Math.floor(Math.random() * styles.length)];
 }
